@@ -4,11 +4,20 @@ class ShowWebCam {
     widthCamera = null;
     heightCamera = null;
 
+    /**
+     * 
+     * @param {number} widthCamera 
+     * @param {number} heightCamera 
+     */
     constructor(widthCamera, heightCamera) {
         this.widthCamera = widthCamera;
         this.heightCamera = heightCamera;
     }
 
+    /**
+     * 
+     * @param {Function} processCamera 
+     */
     async showCamera(processCamera) {
         try {
             this.video = document.getElementById("video");
@@ -24,6 +33,12 @@ class ShowWebCam {
         }
     }
 
+    /**
+     * 
+     * @param {object} options 
+     * @param {object} processCamera 
+     * @param {boolean} existGetUserMedia 
+     */
     async initStream(options, processCamera, existGetUserMedia) {
         if (existGetUserMedia) {
             const stream = await navigator.mediaDevices.getUserMedia(options);
@@ -35,6 +50,10 @@ class ShowWebCam {
         console.log("No existe la funcion getUserMedia... oops :( ");
     }
 
+    /**
+     * 
+     * @returns {object} options
+     */
     getOptions() {
 
         return {

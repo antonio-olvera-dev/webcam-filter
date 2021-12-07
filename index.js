@@ -2,8 +2,8 @@ class Index {
 
     heightCamera = 720;
     widthCamera = 720;
-    colorToReplace = { r: 240, g: 240, b: 240 };
-    distanceAcceptableColor = 100;
+    colorToReplace = { r: 57, g: 39, b: 19 };
+    distanceAcceptableColor = 50;
     showWebCam = null;
 
     constructor() {

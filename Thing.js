@@ -8,11 +8,10 @@ class Thing {
 
     /**
      * 
-     * @param {*} x 
-     * @param {*} y 
+     * @param {number} x 
+     * @param {number} y 
      */
     constructor(x, y) {
-        console.log("Thing");
         this.addPixel(x, y);
         this.xMin = x;
         this.xMax = x;
@@ -22,8 +21,8 @@ class Thing {
 
     /**
      * 
-     * @param {*} x 
-     * @param {*} y 
+     * @param {number} x 
+     * @param {number} y 
      */
     addPixel(x, y) {
 
@@ -42,8 +41,8 @@ class Thing {
 
     /**
      * 
-     * @param {*} x 
-     * @param {*} y 
+     * @param {number} x 
+     * @param {number} y 
      * @returns {boolean}
      */
     isNear(x, y) {
@@ -54,8 +53,8 @@ class Thing {
             return true;
         }
 
-        var distX = 0;
-        var distY = 0;
+        let distX = 0;
+        let distY = 0;
 
         if (x < this.xMin) {
             distX = this.xMin - x;
@@ -70,24 +69,24 @@ class Thing {
             distY = y - this.yMax;
         }
 
-        var distancia = distX + distY;
+        const distancia = distX + distY;
 
-        return distancia < 50;
+        return distancia < 5;
     }
 
     /**
      * 
-     * @param {*} ctx 
+     * @param {object} ctx 
      */
-    draw(ctx) {
+    drawSquare(ctx) {
 
-        ctx.strokeStyle = "#f00";
-        ctx.lineWidth = 4;
+        ctx.strokeStyle = "#00ff00";
+        ctx.lineWidth = 1;
         ctx.beginPath();
-        var x = this.xMin;
-        var y = this.yMin;
-        var width = this.xMax - this.xMin;
-        var height = this.yMax - this.yMin;
+        const x = this.xMin;
+        const y = this.yMin;
+        const width = this.xMax - this.xMin;
+        const height = this.yMax - this.yMin;
 
         ctx.rect(x, y, width, height);
         ctx.stroke();

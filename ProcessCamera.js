@@ -27,10 +27,7 @@ class ProcessCamera {
         let imgData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
         let pixels = imgData.data;
 
-        let sumX = 0;
-        let sumY = 0;
-        let count = 0;
-
+        let things = [];
         for (let i = 0; i < pixels.length; i += 4) {
             let red = pixels[i];
             let green = pixels[i + 1];
@@ -44,31 +41,108 @@ class ProcessCamera {
             );
 
             if (distance < this.distanceAcceptableColor) {
-                pixels[i] = 255; //r
-                pixels[i + 1] = 0; //g
-                pixels[i + 2] = 0; //b
-                
-                let y = Math.floor(i / 4 / this.canvas.width);
-                let x = (i / 4) % this.canvas.width;
+                this.changeFillColor(pixels, i); 
 
-                const thing = new Thing();
+                const y = Math.floor(i / 4 / this.canvas.width);
+                const x = (i / 4) % this.canvas.width;
 
-                // sumX += x;
-                // sumY += y;
-                // count++;
+                if (things.length == 0) {
+
+                    const thing = new Thing(x,y);
+                    things.push(thing);
+
+                }
+                else {
+                    let found = false;
+                    for (let i = 0; i < things.length; i++) {
+                        if (things[i].isNear(x, y)) {
+                            things[i].addPixel(x, y);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        const thing = new Thing(x, y);
+                        things.push(thing);
+                    }
+                }
+
+
             }
         }
 
         this.ctx.putImageData(imgData, 0, 0);
 
-        // if (count > 0) {
-        //     this.ctx.fillStyle = "rgb(201, 26, 172)";
-        //     this.ctx.beginPath();
-        //     this.ctx.arc(sumX / count, sumY / count, 10, 0, 2 * Math.PI);
-        //     this.ctx.fill();
-        // }
+        things = this.joinThings(things);
+
+        for (let i = 0; i < things.length; i++) {
+            const width = things[i].xMax - things[i].xMin;
+            const height = things[i].yMax - things[i].yMin;
+            const area = width * height;
+            
+            if (area > 15) {
+                things[i].drawSquare(this.ctx);
+            }
+        }
+
+        // console.log(things.length);
 
         setTimeout(this.processCamera.bind(this), 30);
+    }
+
+
+    changeFillColor(pixels, i) {
+        pixels[i] = 255;
+        pixels[i + 1] = 255;
+        pixels[i + 2] = 255;
+        // pixels[i + 3] = 255;
+    }
+
+    joinThings(things) {
+        let exit = false;
+
+        for (let i = 0; i < things.length; i++) {
+            for (let i2 = 0; i2 < things.length; i2++) {
+
+                if (i == i2) continue;
+
+                let thing1 = things[i];
+                let thing2 = things[i2];
+
+                let intersect = thing1.xMin < thing2.xMax &&
+                    thing1.xMax > thing2.xMin &&
+                    thing1.yMin < thing2.yMax &&
+                    thing1.yMax > thing2.yMin;
+
+                if (intersect) {
+
+                    for (let i3 = 0; i3 < thing2.pixels.length; i3++) {
+                        thing1.addPixel(
+                            thing2.pixels[i3].x,
+                            thing2.pixels[i3].y
+                        );
+                    }
+
+                    things.splice(i2, 1);
+                    exit = true;
+                    break;
+                }
+
+            }
+
+            if (exit) {
+                break;
+            }
+        }
+
+
+        if (exit) {
+            return this.joinThings(things);
+        } else {
+
+            return things;
+        }
     }
 
 
