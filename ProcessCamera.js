@@ -29,13 +29,13 @@ class ProcessCamera {
 
         let sumX = 0;
         let sumY = 0;
-        let cuenta = 0;
+        let count = 0;
 
-        for (let p = 0; p < pixels.length; p += 4) {
-            let red = pixels[p];
-            let green = pixels[p + 1];
-            let blue = pixels[p + 2];
-            let alpha = pixels[p + 3];
+        for (let i = 0; i < pixels.length; i += 4) {
+            let red = pixels[i];
+            let green = pixels[i + 1];
+            let blue = pixels[i + 2];
+            let alpha = pixels[i + 3];
 
             let distance = Math.sqrt(
                 Math.pow(this.colorToReplace.r - red, 2) +
@@ -44,27 +44,29 @@ class ProcessCamera {
             );
 
             if (distance < this.distanceAcceptableColor) {
-                pixels[p] = 255; //r
-                pixels[p + 1] = 0; //g
-                pixels[p + 2] = 0; //b
+                pixels[i] = 255; //r
+                pixels[i + 1] = 0; //g
+                pixels[i + 2] = 0; //b
+                
+                let y = Math.floor(i / 4 / this.canvas.width);
+                let x = (i / 4) % this.canvas.width;
 
-                let y = Math.floor(p / 4 / this.canvas.width);
-                let x = (p / 4) % this.canvas.width;
+                const thing = new Thing();
 
-                sumX += x;
-                sumY += y;
-                cuenta++;
+                // sumX += x;
+                // sumY += y;
+                // count++;
             }
         }
 
         this.ctx.putImageData(imgData, 0, 0);
 
-        if (cuenta > 0) {
-            this.ctx.fillStyle = "rgb(201, 26, 172)";
-            this.ctx.beginPath();
-            this.ctx.arc(sumX / cuenta, sumY / cuenta, 10, 0, 2 * Math.PI);
-            this.ctx.fill();
-        }
+        // if (count > 0) {
+        //     this.ctx.fillStyle = "rgb(201, 26, 172)";
+        //     this.ctx.beginPath();
+        //     this.ctx.arc(sumX / count, sumY / count, 10, 0, 2 * Math.PI);
+        //     this.ctx.fill();
+        // }
 
         setTimeout(this.processCamera.bind(this), 30);
     }
