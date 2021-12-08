@@ -8,6 +8,14 @@ class ProcessCamera {
     video = null;
     ctx = null;
 
+    /**
+     * 
+     * @param {number} heightCamera 
+     * @param {number} widthCamera 
+     * @param {object} colorToReplace 
+     * @param {number} distanceAcceptableColor 
+     * @param {object} showWebCam 
+     */
     constructor(heightCamera, widthCamera, colorToReplace, distanceAcceptableColor, showWebCam) {
 
 
@@ -19,15 +27,47 @@ class ProcessCamera {
         this.video = showWebCam.video;
     }
 
+
     processCamera() {
 
         this.ctx = this.canvas.getContext("2d");
         this.drawImage();
-
         let imgData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
         let pixels = imgData.data;
 
         let things = [];
+        this.fillThings(things, pixels);
+
+        this.ctx.putImageData(imgData, 0, 0);
+
+        const newThings = this.joinThings(things);
+        this.drawSquare(newThings);
+
+        setTimeout(this.processCamera.bind(this), 30);
+    }
+
+    /**
+     * 
+     * @param {object} newThings 
+     */
+    drawSquare(newThings) {
+        for (let i = 0; i < newThings.length; i++) {
+            const width = newThings[i].xMax - newThings[i].xMin;
+            const height = newThings[i].yMax - newThings[i].yMin;
+            const area = width * height;
+
+            if (area > 15) {
+                newThings[i].drawSquare(this.ctx);
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param {object} things 
+     * @param {number[]} pixels 
+     */
+    fillThings(things, pixels) {
         for (let i = 0; i < pixels.length; i += 4) {
             let red = pixels[i];
             let green = pixels[i + 1];
@@ -41,14 +81,14 @@ class ProcessCamera {
             );
 
             if (distance < this.distanceAcceptableColor) {
-                this.changeFillColor(pixels, i); 
+                this.changeFillColor(pixels, i);
 
                 const y = Math.floor(i / 4 / this.canvas.width);
                 const x = (i / 4) % this.canvas.width;
 
                 if (things.length == 0) {
 
-                    const thing = new Thing(x,y);
+                    const thing = new Thing(x, y);
                     things.push(thing);
 
                 }
@@ -71,78 +111,46 @@ class ProcessCamera {
 
             }
         }
-
-        this.ctx.putImageData(imgData, 0, 0);
-
-        things = this.joinThings(things);
-
-        for (let i = 0; i < things.length; i++) {
-            const width = things[i].xMax - things[i].xMin;
-            const height = things[i].yMax - things[i].yMin;
-            const area = width * height;
-            
-            if (area > 15) {
-                things[i].drawSquare(this.ctx);
-            }
-        }
-
-        // console.log(things.length);
-
-        setTimeout(this.processCamera.bind(this), 30);
     }
 
-
-    changeFillColor(pixels, i) {
-        pixels[i] = 255;
-        pixels[i + 1] = 255;
-        pixels[i + 2] = 255;
-        // pixels[i + 3] = 255;
-    }
-
+    /**
+    * 
+    * @param {object} things 
+    * @returns {object} things
+    */
     joinThings(things) {
         let exit = false;
 
-        for (let i = 0; i < things.length; i++) {
-            for (let i2 = 0; i2 < things.length; i2++) {
+        for (const thing of things) {
+            for (const [indexOfThing2, thing2] of things.entries()) {
 
-                if (i == i2) continue;
-
-                let thing1 = things[i];
-                let thing2 = things[i2];
-
-                let intersect = thing1.xMin < thing2.xMax &&
-                    thing1.xMax > thing2.xMin &&
-                    thing1.yMin < thing2.yMax &&
-                    thing1.yMax > thing2.yMin;
+                if (thing == thing2) continue;
+                let { intersect } = compareIntersect(thing, thing2);
 
                 if (intersect) {
 
-                    for (let i3 = 0; i3 < thing2.pixels.length; i3++) {
-                        thing1.addPixel(
-                            thing2.pixels[i3].x,
-                            thing2.pixels[i3].y
-                        );
+                    for (const pixel of thing2.pixels) {
+                        thing.addPixel(pixel.x, pixel.y);
                     }
 
-                    things.splice(i2, 1);
+                    things.splice(indexOfThing2, 1);
                     exit = true;
                     break;
                 }
-
             }
-
-            if (exit) {
-                break;
-            }
+            if (exit) break;
         }
 
+        function compareIntersect(thing, thing2) {
 
-        if (exit) {
-            return this.joinThings(things);
-        } else {
-
-            return things;
+            let intersect = thing.xMin < thing2.xMax &&
+                thing.xMax > thing2.xMin &&
+                thing.yMin < thing2.yMax &&
+                thing.yMax > thing2.yMin;
+            return { intersect };
         }
+
+        return exit ? this.joinThings(things) : things;
     }
 
 
@@ -158,5 +166,17 @@ class ProcessCamera {
             this.canvas.width,
             this.canvas.height
         );
+    }
+
+    /**
+     * 
+     * @param {number[]} pixels 
+     * @param {number} i 
+     */
+    changeFillColor(pixels, i) {
+        pixels[i] = 255;
+        pixels[i + 1] = 255;
+        pixels[i + 2] = 255;
+        // pixels[i + 3] = 255;
     }
 }
