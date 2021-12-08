@@ -91,4 +91,25 @@ class Thing {
         ctx.rect(x, y, width, height);
         ctx.stroke();
     }
+
+    /**
+    * 
+    * @param {object} ctx 
+    */
+    drawCircle(ctx) {
+
+        const color = "#ff0000";
+        ctx.fillStyle = color;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        const x = this.xMin;
+        const y = this.yMin;
+        const width = this.xMax - this.xMin;
+        const height = this.yMax - this.yMin;
+
+        ctx.arc((x + width / 2), (y + height / 2), 5, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+    }
 }

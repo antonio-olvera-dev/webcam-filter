@@ -41,7 +41,7 @@ class ProcessCamera {
         this.ctx.putImageData(imgData, 0, 0);
 
         const newThings = this.joinThings(things);
-        this.drawSquare(newThings);
+        this.drawCanvas(newThings);
 
         setTimeout(this.processCamera.bind(this), 30);
     }
@@ -50,7 +50,7 @@ class ProcessCamera {
      * 
      * @param {object} newThings 
      */
-    drawSquare(newThings) {
+    drawCanvas(newThings) {
         for (let i = 0; i < newThings.length; i++) {
             const width = newThings[i].xMax - newThings[i].xMin;
             const height = newThings[i].yMax - newThings[i].yMin;
@@ -58,6 +58,7 @@ class ProcessCamera {
 
             if (area > 15) {
                 newThings[i].drawSquare(this.ctx);
+                newThings[i].drawCircle(this.ctx);
             }
         }
     }
