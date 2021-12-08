@@ -28,13 +28,8 @@ class Thing {
 
         this.pixels.push({ x: x, y: y });
 
-        if (x < this.xMin) {
-            this.xMin = x;
-        }
-        if (x > this.xMax) {
-            this.xMax = x;
-        }
-
+        this.xMin = x < this.xMin ? x : this.xMin;
+        this.xMax = x > this.xMax ? x : this.xMax;
         this.yMin = y < this.yMin ? y : this.yMin;
         this.yMax = y > this.yMax ? y : this.yMax;
     }
@@ -47,31 +42,24 @@ class Thing {
      */
     isNear(x, y) {
 
-        if (x >= this.xMin && x <= this.xMax &&
-            y >= this.yMin && y <= this.yMax) {
-
-            return true;
-        }
-
-        let distX = 0;
-        let distY = 0;
+        let distanceX = 0;
+        let distanceY = 0;
 
         if (x < this.xMin) {
-            distX = this.xMin - x;
+            distanceX = this.xMin - x;
         }
         if (x > this.xMax) {
-            distX = x - this.xMax;
+            distanceX = x - this.xMax;
         }
         if (y < this.yMin) {
-            distY = this.yMin - y;
+            distanceY = this.yMin - y;
         }
         if (y > this.yMax) {
-            distY = y - this.yMax;
+            distanceY = y - this.yMax;
         }
 
-        const distancia = distX + distY;
-
-        return distancia < 5;
+        const distance = distanceX + distanceY;
+        return distance < 5;
     }
 
     /**
