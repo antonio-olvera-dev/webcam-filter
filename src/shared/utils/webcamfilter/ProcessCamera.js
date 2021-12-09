@@ -1,4 +1,6 @@
-class ProcessCamera {
+import { Thing } from "./Thing";
+
+export class ProcessCamera {
 
     heightCamera = null;
     widthCamera = null;
@@ -73,7 +75,7 @@ class ProcessCamera {
             let red = pixels[i];
             let green = pixels[i + 1];
             let blue = pixels[i + 2];
-            let alpha = pixels[i + 3];
+            // let alpha = pixels[i + 3];
 
             let distance = Math.sqrt(
                 Math.pow(this.colorToReplace.r - red, 2) +
@@ -87,7 +89,7 @@ class ProcessCamera {
                 const y = Math.floor(i / 4 / this.canvas.width);
                 const x = (i / 4) % this.canvas.width;
 
-                if (things.length == 0) {
+                if (things.length === 0) {
 
                     const thing = new Thing(x, y);
                     things.push(thing);
@@ -125,7 +127,7 @@ class ProcessCamera {
         for (const thing of things) {
             for (const [indexOfThing2, thing2] of things.entries()) {
 
-                if (thing == thing2) continue;
+                if (thing === thing2) continue;
                 let { intersect } = compareIntersect(thing, thing2);
 
                 if (intersect) {

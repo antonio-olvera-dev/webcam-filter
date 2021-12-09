@@ -1,4 +1,4 @@
-class Thing {
+export class Thing {
 
     pixels = [];
     xMin = 0;

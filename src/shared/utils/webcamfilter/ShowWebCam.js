@@ -1,4 +1,4 @@
-class ShowWebCam {
+export class ShowWebCam {
     video = null;
     canvas = null;
     widthCamera = null;
@@ -9,9 +9,11 @@ class ShowWebCam {
      * @param {number} widthCamera 
      * @param {number} heightCamera 
      */
-    constructor(widthCamera, heightCamera) {
+    constructor(widthCamera, heightCamera, video, canvas) {
         this.widthCamera = widthCamera;
         this.heightCamera = heightCamera;
+        this.video = video;
+        this.canvas = canvas;
     }
 
     /**
@@ -20,8 +22,6 @@ class ShowWebCam {
      */
     async showCamera(processCamera) {
         try {
-            this.video = document.getElementById("video");
-            this.canvas = document.getElementById("canvas");
 
             const options = this.getOptions();
             const existGetUserMedia = navigator.mediaDevices.getUserMedia;
