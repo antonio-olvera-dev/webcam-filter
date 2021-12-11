@@ -44,8 +44,6 @@ export class ProcessCamera {
 
         const newThings = this.joinThings(things);
         this.drawCanvas(newThings);
-
-        setTimeout(this.processCamera.bind(this), 30);
     }
 
     /**

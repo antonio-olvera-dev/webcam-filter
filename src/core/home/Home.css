@@ -14,6 +14,14 @@ video {
 }
 
 canvas {
-  margin-top: 50px;
+  margin-top: 20px;
+  align-self: center;
+}
+
+.description {
+  padding: 20px;
+}
+.controls {
+  margin-top: 20px;
   align-self: center;
 }

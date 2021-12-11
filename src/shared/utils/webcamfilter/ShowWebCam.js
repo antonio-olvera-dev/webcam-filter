@@ -43,7 +43,10 @@ export class ShowWebCam {
         if (existGetUserMedia) {
             const stream = await navigator.mediaDevices.getUserMedia(options);
             this.video.srcObject = stream;
-            processCamera();
+
+            setInterval(() => {
+                processCamera();
+            }, 30);
             return;
         }
 
