@@ -9,6 +9,7 @@ export class ProcessCamera {
     canvas = null;
     video = null;
     ctx = null;
+    replacementColor = null;
 
     /**
      * 
@@ -18,7 +19,7 @@ export class ProcessCamera {
      * @param {number} distanceAcceptableColor 
      * @param {object} showWebCam 
      */
-    constructor(heightCamera, widthCamera, colorToReplace, distanceAcceptableColor, showWebCam) {
+    constructor(heightCamera, widthCamera, colorToReplace, distanceAcceptableColor, showWebCam, replacementColor) {
 
 
         this.heightCamera = heightCamera || 720;
@@ -27,6 +28,7 @@ export class ProcessCamera {
         this.distanceAcceptableColor = distanceAcceptableColor || 190;
         this.canvas = showWebCam.canvas;
         this.video = showWebCam.video;
+        this.replacementColor = replacementColor || { r: 255, g: 255, b: 255 };
     }
 
 
@@ -175,9 +177,9 @@ export class ProcessCamera {
      * @param {number} i 
      */
     changeFillColor(pixels, i) {
-        pixels[i] = 255;
-        pixels[i + 1] = 255;
-        pixels[i + 2] = 255;
+        pixels[i] = this.replacementColor.r;
+        pixels[i + 1] = this.replacementColor.g;
+        pixels[i + 2] = this.replacementColor.b;
         // pixels[i + 3] = 255;
     }
 }

@@ -10,6 +10,7 @@ export class WebCamFilter {
     showWebCam = null;
     video = null;
     canvas = null;
+    replacementColor = { r: 255, g: 255, b: 255 };
 
     constructor(video, canvas) {
         this.video = video;
@@ -22,7 +23,7 @@ export class WebCamFilter {
         this.showWebCam = new ShowWebCam(this.widthCamera, this.heightCamera, this.video, this.canvas);
         const processCamera = () => {
 
-            const processCamera = new ProcessCamera(this.heightCamera, this.widthCamera, this.colorToReplace, this.distanceAcceptableColor, this.showWebCam);
+            const processCamera = new ProcessCamera(this.heightCamera, this.widthCamera, this.colorToReplace, this.distanceAcceptableColor, this.showWebCam, this.replacementColor);
             processCamera.processCamera();
         }
         this.showWebCam.showCamera(processCamera);

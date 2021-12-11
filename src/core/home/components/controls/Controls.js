@@ -2,26 +2,40 @@ import { useRef } from 'react';
 import './Controls.css';
 export default function Controls(props) {
 
-    let colorHex = "#000000";
+    let colorHexToReplace = "#000000";
+    let colorHexReplacementColor = "#000000";
     const refPicker = useRef(null);
+    const refPickerReplacementColor = useRef(null);
 
-    colorHex = getColorHex(props, colorHex);
+    colorHexToReplace = getColorHexToReplace(props, colorHexToReplace);
+    colorHexReplacementColor = getColorHexReplacementColor(props, colorHexToReplace);
 
     return (
         <div className='controls'>
             <h1>Controls</h1>
             <div>
                 <label>Color to replace </label>
-                <input ref={refPicker} onChange={(event) => action(event, props)} type="color" defaultValue={colorHex}></input>
+                <input ref={refPicker} onChange={(event) => actionToReplace(event, props)} type="color" defaultValue={colorHexToReplace}></input>
+            </div>
+            <div>
+                <label>Replacement color </label>
+                <input ref={refPickerReplacementColor} onChange={(event) => actionReplacementColor(event, props)} type="color" defaultValue={colorHexReplacementColor}></input>
             </div>
         </div>
     )
 }
 
 
-function getColorHex(props, colorHex) {
+function getColorHexToReplace(props, colorHexToReplace) {
     if (props.webCamFilter) {
-        colorHex = colorsToHex(props.webCamFilter.colorToReplace);
+        colorHexToReplace = colorsToHex(props.webCamFilter.colorToReplace);
+    }
+    return colorHexToReplace;
+}
+
+function getColorHexReplacementColor(props, colorHex) {
+    if (props.webCamFilter) {
+        colorHex = colorsToHex(props.webCamFilter.replacementColor);
     }
     return colorHex;
 }
@@ -47,12 +61,22 @@ function hexToRgb(hex) {
     } : null;
 }
 
-function action(event, props) {
+function actionToReplace(event, props) {
 
     const colorHex = event.target.value;
     const colorRgb = hexToRgb(colorHex);
 
     if (props.webCamFilter) {
         props.webCamFilter.colorToReplace = colorRgb;
+    }
+}
+
+function actionReplacementColor(event, props) {
+
+    const colorHex = event.target.value;
+    const colorRgb = hexToRgb(colorHex);
+
+    if (props.webCamFilter) {
+        props.webCamFilter.replacementColor = colorRgb;
     }
 }
