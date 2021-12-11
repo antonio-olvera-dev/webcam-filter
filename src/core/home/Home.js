@@ -1,6 +1,9 @@
-import { useEffect, useRef} from "react";
+import { useEffect, useRef } from "react";
 import { WebCamFilter } from "../../shared/utils/webcamfilter/WebCamFilter";
 import './Home.css';
+import Description from './components/description/Description';
+import Video from './components/video/Video';
+import Canvas from './components/canvas/Canvas';
 
 export default function Home() {
 
@@ -12,15 +15,10 @@ export default function Home() {
   });
 
   return (
-    <div>
-      <h1>Home</h1>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi,
-        voluptatum.
-      </p>
-
-      <video ref={refVideo} autoPlay  ></video>
-      <canvas ref={refCanvas} width="475" height="475"></canvas>
+    <div className="home">
+      <Description />
+      <Video refVideo={refVideo} width={150} height={150} />
+      <Canvas refCanvas={refCanvas} width={475} height={475} />
     </div>
   );
 }
