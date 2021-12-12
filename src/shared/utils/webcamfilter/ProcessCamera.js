@@ -10,6 +10,8 @@ export class ProcessCamera {
     video = null;
     ctx = null;
     replacementColor = null;
+    showCircle = false;
+    showSquare = false;
 
     /**
      * 
@@ -19,7 +21,7 @@ export class ProcessCamera {
      * @param {number} distanceAcceptableColor 
      * @param {object} showWebCam 
      */
-    constructor(heightCamera, widthCamera, colorToReplace, distanceAcceptableColor, showWebCam, replacementColor) {
+    constructor(heightCamera, widthCamera, colorToReplace, distanceAcceptableColor, showWebCam, replacementColor, showCircle, showSquare) {
 
 
         this.heightCamera = heightCamera || 720;
@@ -29,6 +31,8 @@ export class ProcessCamera {
         this.canvas = showWebCam.canvas;
         this.video = showWebCam.video;
         this.replacementColor = replacementColor || { r: 255, g: 255, b: 255 };
+        this.showCircle = showCircle;
+        this.showSquare = showSquare;
     }
 
 
@@ -59,8 +63,12 @@ export class ProcessCamera {
             const area = width * height;
 
             if (area > 15) {
-                newThings[i].drawSquare(this.ctx);
-                newThings[i].drawCircle(this.ctx);
+                if (this.showCircle) {
+                    newThings[i].drawCircle(this.ctx);
+                }
+                if (this.showSquare) {
+                    newThings[i].drawSquare(this.ctx);
+                }
             }
         }
     }

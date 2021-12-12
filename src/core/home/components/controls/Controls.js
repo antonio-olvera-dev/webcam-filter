@@ -1,30 +1,54 @@
 import { useRef } from 'react';
 import './Controls.css';
+import { useState } from 'react';
 export default function Controls(props) {
 
     let colorHexToReplace = "#000000";
     let colorHexReplacementColor = "#000000";
+    const [showCircle, setShowCircle] = useState(getShowCircle(props));
+    const [showSquare, setShowSquare] = useState(getShowSquare(props));
     const refPicker = useRef(null);
     const refPickerReplacementColor = useRef(null);
 
     colorHexToReplace = getColorHexToReplace(props, colorHexToReplace);
     colorHexReplacementColor = getColorHexReplacementColor(props, colorHexToReplace);
 
+
     return (
         <div className='controls'>
-            <h1>Controls</h1>
+            <h2>Controls</h2>
             <div>
-                <label>Color to replace </label>
+                <label>Color to replace</label>
                 <input ref={refPicker} onChange={(event) => actionToReplace(event, props)} type="color" defaultValue={colorHexToReplace}></input>
             </div>
             <div>
-                <label>Replacement color </label>
+                <label>Replacement color</label>
                 <input ref={refPickerReplacementColor} onChange={(event) => actionReplacementColor(event, props)} type="color" defaultValue={colorHexReplacementColor}></input>
+            </div>
+            <div>
+                <label>Show circle</label>
+                <input onChange={(event) => actionShowCircle(event, props, setShowCircle)} type="checkbox" checked={showCircle}></input>
+            </div>
+            <div>
+                <label>Show square</label>
+                <input onChange={(event) => actionShowSquare(event, props, setShowSquare)} type="checkbox" checked={showSquare}></input>
             </div>
         </div>
     )
 }
 
+
+
+
+function actionShowCircle(event, props, setShowCircle) {
+    setShowCircle(event.target.checked);
+    props.webCamFilter.showCircle = event.target.checked;
+}
+
+function actionShowSquare(event, props, setShowSquare) {
+    setShowSquare(event.target.checked);
+    props.webCamFilter.showSquare = event.target.checked;
+}
 
 function getColorHexToReplace(props, colorHexToReplace) {
     if (props.webCamFilter) {
@@ -38,6 +62,21 @@ function getColorHexReplacementColor(props, colorHex) {
         colorHex = colorsToHex(props.webCamFilter.replacementColor);
     }
     return colorHex;
+}
+
+function getShowCircle(props) {
+    if (props.webCamFilter?.showCircle) {
+        return true;
+    } else {
+        return false;
+    }
+}
+function getShowSquare(props) {
+    if (props.webCamFilter?.showSquare) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function colorsToHex(color) {
