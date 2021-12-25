@@ -20,9 +20,9 @@ export default function Home() {
   return (
     <div className="home">
       <Description />
+      <Controls webCamFilter={webCamFilter}/>
       <Video refVideo={refVideo} width={150} height={150} />
       <Canvas refCanvas={refCanvas} width={475} height={475} />
-      <Controls webCamFilter={webCamFilter}/>
     </div>
   );
 }

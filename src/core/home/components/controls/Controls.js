@@ -17,19 +17,21 @@ export default function Controls(props) {
     return (
         <div className='controls'>
             <h2>Controls</h2>
-            <div>
-                <label>Color to replace</label>
-                <input ref={refPicker} onChange={(event) => actionToReplace(event, props)} type="color" defaultValue={colorHexToReplace}></input>
+            <div className='containerPickers'>
+                <div className='inputColorToReplace'>
+                    <label>Color to replace</label>
+                    <input ref={refPicker} onChange={(event) => actionToReplace(event, props)} type="color" defaultValue={colorHexToReplace}></input>
+                </div>
+                <div className='inputColorToReplace'>
+                    <label>Replacement color</label>
+                    <input ref={refPickerReplacementColor} onChange={(event) => actionReplacementColor(event, props)} type="color" defaultValue={colorHexReplacementColor}></input>
+                </div>
             </div>
-            <div>
-                <label>Replacement color</label>
-                <input ref={refPickerReplacementColor} onChange={(event) => actionReplacementColor(event, props)} type="color" defaultValue={colorHexReplacementColor}></input>
-            </div>
-            <div>
+            <div className='showCircle'>
                 <label>Show circle</label>
                 <input onChange={(event) => actionShowCircle(event, props, setShowCircle)} type="checkbox" checked={showCircle}></input>
             </div>
-            <div>
+            <div className='showSquare'>
                 <label>Show square</label>
                 <input onChange={(event) => actionShowSquare(event, props, setShowSquare)} type="checkbox" checked={showSquare}></input>
             </div>
